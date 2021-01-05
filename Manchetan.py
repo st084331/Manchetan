@@ -11,25 +11,26 @@ def nearest_school(schools_exits_and_blocks, body_exits_and_block):
     for schools in schools_exits_and_blocks:
         all_schools_exits.append(schools[0])
         all_schools_blocks.append(schools[1])
-    min_block_dist = [float('inf'), float('inf')]
+    min_block_dist = float('inf')
     block_dists = []
     # Необходимо рассмотреть школы в определенном радиусе от человека, чтобы сократить выборку
     for school_block in all_schools_blocks:
         block_dist = [int(math.fabs(body_block[0] - school_block[0])), int(math.fabs(body_block[1] - school_block[1]))]
+        dist = min(block_dist)
         block_dists.append(block_dist)
-        if block_dist[0] < min_block_dist[0]:
-            min_block_dist[0] = block_dist[0]
-        if block_dist[1] < min_block_dist[1]:
-            min_block_dist[1] = block_dist[1]
+        if dist < min_block_dist:
+            min_block_dist = dist
     schools_exits = []
     while schools_exits == []:
         i = 0
         for block_dist in block_dists:
-            if(block_dist[0] <= min_block_dist[0]+1 and block_dist[1] <= min_block_dist[1]+1):
+            if(block_dist[0] <= min_block_dist+1 and block_dist[1] <= min_block_dist+1):
                 schools_exits.append(all_schools_exits[i])
             i += 1
-        min_block_dist[0] += 1
-        min_block_dist[1] += 1
+        min_block_dist += 1
+    print('Школы в ближайших районах:')
+    for school in schools_exits:
+        print(school)
     nearest_school = []
     min_dist = float('inf')
     dists = []
@@ -82,9 +83,9 @@ def find_exits_and_block(place, side):
     return exits_and_block
 
 
-N_STREATS = 25 # Обязательно квадрат целого числа
+N_STREATS = 225 # Обязательно квадрат целого числа
 side = 3
-n_schools = 4
+n_schools = random.randint(2,int(math.sqrt(N_STREATS)))
 schools = []
 for i in range(n_schools):
     schools.append([random.randint(0, int(math.sqrt(N_STREATS))*side), random.randint(0, int(math.sqrt(N_STREATS))*side)])
@@ -95,10 +96,10 @@ body_exits_and_block = find_exits_and_block(body, side)
 schools_exits_and_blocks = []
 for school in schools:
     schools_exits_and_blocks.append(find_exits_and_block(school, side))
-right_schools = nearest_school(schools_exits_and_blocks, body_exits_and_block)
 print('Наш житель', body_exits_and_block)
 print('Школы:')
 for school in schools_exits_and_blocks:
     print(school)
+right_schools = nearest_school(schools_exits_and_blocks, body_exits_and_block)
 for school in right_schools:
     print("Подходит школа", school)
