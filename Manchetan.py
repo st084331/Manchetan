@@ -16,7 +16,7 @@ def nearest_school(schools_exits_and_blocks, body_exits_and_block):
     # Необходимо рассмотреть школы в определенном радиусе от человека, чтобы сократить выборку
     for school_block in all_schools_blocks:
         block_dist = [int(math.fabs(body_block[0] - school_block[0])), int(math.fabs(body_block[1] - school_block[1]))]
-        dist = min(block_dist)
+        dist = max(block_dist)
         block_dists.append(block_dist)
         if dist < min_block_dist:
             min_block_dist = dist
@@ -83,8 +83,8 @@ def find_exits_and_block(place, side):
     return exits_and_block
 
 
-N_STREATS = 225 # Обязательно квадрат целого числа
-side = 3
+N_STREATS = int((random.randint(2,11))**2) # Обязательно квадрат целого числа
+side = random.randint(2,10)
 n_schools = random.randint(2,int(math.sqrt(N_STREATS)))
 schools = []
 for i in range(n_schools):
